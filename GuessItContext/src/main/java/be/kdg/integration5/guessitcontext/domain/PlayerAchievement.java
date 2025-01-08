@@ -1,8 +1,6 @@
 package be.kdg.integration5.guessitcontext.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +16,9 @@ import java.util.UUID;
 @NoArgsConstructor
 public class PlayerAchievement {
 
-    @Id
-    private UUID
+    @EmbeddedId
+    private PlayerAchievementId playerAchievementId;
+
+    @OneToMany(mappedBy = )
+    private Player player;
 }
