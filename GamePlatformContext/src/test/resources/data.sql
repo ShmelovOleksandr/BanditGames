@@ -1,6 +1,6 @@
 insert into games(game_id, title, description, price_amount, currency_code, max_lobby_player_amount, frontend_url, backend_url, game_image_url)
 values ('7a0ff880-adf8-4b6c-821f-607f3d6d5895', 'Game', 'The best game', 10, 'USD', 2, 'http://localhost:9090/frontend', 'http://localhost:9090/backend', 'http://localhost:9090/image'),
-       ('203028d1-4ce6-426e-9b4b-de9ec03f12be', 'Checkers', 'Normal checkers game', 5.99, 'EUR', 2, 'http://localhost:9090/frontend', 'http://localhost:9090/backend', 'http://localhost:9090/image');
+       ('203028d1-4ce6-426e-9b4b-de9ec03f12be', 'International Checkers', 'Normal checkers game', 5.99, 'EUR', 2, 'http://localhost:9090/frontend', 'http://localhost:9090/backend', 'http://localhost:9090/image');
 
 
 insert into players(player_id, age, gender, username)

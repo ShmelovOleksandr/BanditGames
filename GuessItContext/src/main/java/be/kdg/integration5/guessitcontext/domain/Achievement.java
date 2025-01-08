@@ -10,18 +10,21 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "players")
+@Table(name = "achievements")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Player {
+public class Achievement {
+
     @Id
-    @Column(name = "player_id")
-    private UUID playerId;
+    private UUID achievementId;
 
     @Column(nullable = false)
-    private String username;
+    private String description;
+
+    @Column(nullable = false)
+    private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private List<PlayerAchievement> playerAchievements;
