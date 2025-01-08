@@ -59,6 +59,8 @@ public class SessionDatabaseAdapter implements PersistSessionPort, FindSessionPo
         SessionJpaEntity savedSessionJpaEntity = sessionJpaRepository.save(sessionJpaEntity);
 
         // Process and save PlayerSession entities
+
+
         Set<PlayerSessionJpaEntity> playerSessionJpaEntities = session.getActivities().stream().map(playerActivity -> {
             PlayerJpaEntity playerJpaEntity = playerJpaRepository.getReferenceById(playerActivity.getPlayer().getPlayerId().uuid());
             PlayerSessionId playerSessionId = new PlayerSessionId(savedSessionJpaEntity.getSessionId(), playerJpaEntity.getPlayerId());

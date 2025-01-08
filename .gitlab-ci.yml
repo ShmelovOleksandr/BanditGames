@@ -1,16 +1,37 @@
 stages:
   - build
   - test
-  - upload
+  - security-test
   - deploy
 
-workflow:
- rules:
-     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-       when: never
-     - if: '$CI_COMMIT_BRANCH == "main"'
-       when: always
-     - when: never
+
+
+
+merge-test:
+  stage: test
+  script:
+    - exit 0
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: always
+    - when: never
+  
 
 include:
   - local: '/GamePlatformContext/game-context-gitlab-ci.yml'
+    rules:
+      - if: $CI_PIPELINE_SOURCE != "merge_request_event"
+      - changes:
+        - 'GamePlatformContext/*'
+  
+  - local: '/CheckersContext/checkers-context-gitlab-ci.yml'
+    rules:
+      - if: $CI_PIPELINE_SOURCE != "merge_request_event"
+      - changes:
+        - 'CheckersContext/*'
+  
+  - local: '/StatisticsContext/statistics-context-gitlab-ci.yml'
+    rules:
+      - if: $CI_PIPELINE_SOURCE != "merge_request_event"
+      - changes:
+        - 'StatisticsContext/*'

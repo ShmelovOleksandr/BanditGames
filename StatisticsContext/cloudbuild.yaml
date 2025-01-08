@@ -1,0 +1,53 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: [
+      '-c',
+      'docker pull $_DOCKER_IMAGE_PATH || exit 0'
+    ]
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', '$_DOCKER_IMAGE_PATH',
+      '--cache-from', '$_DOCKER_IMAGE_PATH',
+      '-f', 'StatisticsContext/Dockerfile',
+      '.'
+    ]
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      '$_DOCKER_IMAGE_PATH'
+    ]
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: [
+      'run',
+      'deploy',
+      '$_SERVICE_NAME',
+      '--image',
+      '$_DOCKER_IMAGE_PATH',
+      '--region',
+      '$_LOCATION',
+      '--port',
+      '3000',
+      '--vpc-connector',
+      'my-vpc-connector',
+      '--ingress',
+      'internal',
+      '--allow-unauthenticated'
+    ]
+
+substitutions:
+  _LOCATION: 'europe-west1'
+  _SERVICE_NAME: 'gameplatform-service'
+  _DOCKER_IMAGE_PATH: 'europe-west1-docker.pkg.dev/checkers-integration5/checkers-repo/statistics-service:latest'
+
+options:
+  automapSubstitutions: true
+  logging: CLOUD_LOGGING_ONLY
+
+images:
+  - '$_DOCKER_IMAGE_PATH'

@@ -1,7 +1,7 @@
 FROM gradle:8.8-jdk21 as build
 WORKDIR /app
-COPY --chown=gradle:gradle ../ /app
-RUN gradle :CheckersContext:clean :Checkers:build -x test --no-daemon
+COPY --chown=gradle:gradle . /app
+RUN gradle :CheckersContext:clean :CheckersContext:build -x test --no-daemon
 
 FROM openjdk:21-slim as builder
 WORKDIR /app

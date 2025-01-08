@@ -16,6 +16,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GameJpaEntity {
+
+
+    // comment
     @Id
     @Column(nullable = false, unique = true, updatable = false)
     private UUID gameId;

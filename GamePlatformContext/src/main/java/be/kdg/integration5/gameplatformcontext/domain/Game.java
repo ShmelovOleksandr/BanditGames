@@ -11,8 +11,6 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 public class Game {
-    private static final int MAX_PLAYERS = 2;
-
     private GameId gameId;
     private String title;
     private String description;

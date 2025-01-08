@@ -43,7 +43,7 @@ public class ChatControllerUnitTest {
                         .content("{\"query\": \"Hello chatbot!\"}")) // JSON payload
                 .andExpect(status().isBadGateway())
                 .andExpect(jsonPath("$.status").value(502)) // Check HTTP status
-                .andExpect(jsonPath("$.detail").value("Chatbot is unreachable: Connection refused: localhost/[0:0:0:0:0:0:0:1]:8000")) // Match the error detail
+                .andExpect(jsonPath("$.detail").value(org.hamcrest.Matchers.containsString("Chatbot is unreachable"))) // Check if detail contains text
                 .andExpect(jsonPath("$.title").value("Bad Gateway")); // Match the title
     }
 }

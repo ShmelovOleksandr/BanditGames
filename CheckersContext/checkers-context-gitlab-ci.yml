@@ -9,10 +9,10 @@ before_script:
   - GRADLE_USER_HOME="$(pwd)/.gradle"
   - export GRADLE_USER_HOME
 
-gameplatform-build:
+checkers-build:
   stage: build
   script:
-    - gradle --build-cache :GamePlatformContext:assemble
+    - gradle --build-cache :CheckersContext:assemble
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: push
@@ -20,7 +20,7 @@ gameplatform-build:
       - build
       - .gradle
 
-gameplatform-unit-test:
+checkers-unit-test:
   stage: test
   services:
     - docker:24.0.5-dind
@@ -31,11 +31,11 @@ gameplatform-unit-test:
     POSTGRES_PASSWORD: 'test'
     CI_DB_HOST_PORT: 'postgres:5432'
   script:
-    - gradle :GamePlatformContext:unitTest --no-daemon
+    - gradle :CheckersContext:unitTest --no-daemon
   artifacts:
     when: always
     reports:
-      junit: GamePlatformContext/build/test-results/unitTest/**/TEST-*.xml
+      junit: CheckersContext/build/test-results/unitTest/**/TEST-*.xml
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
@@ -43,7 +43,7 @@ gameplatform-unit-test:
       - build
       - .gradle
 
-gameplatform-integration-test:
+checkers-integration-test:
   stage: test
   services:
     - docker:24.0.5-dind
@@ -55,11 +55,11 @@ gameplatform-integration-test:
     POSTGRES_PASSWORD: 'test'
     CI_DB_HOST_PORT: 'postgres:5432'
   script:
-    - gradle :GamePlatformContext:integrationTest --no-daemon
+    - gradle :CheckersContext:integrationTest --no-daemon
   artifacts:
     when: always
     reports:
-      junit: GamePlatformContext/build/test-results/integrationTest/**/TEST-*.xml
+      junit: CheckersContext/build/test-results/integrationTest/**/TEST-*.xml
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
@@ -67,11 +67,35 @@ gameplatform-integration-test:
       - build
       - .gradle 
 
-gameplatform-trigger-gcb:
+checkers-end-2-end-test:
+  stage: test
+  services:
+    - docker:24.0.5-dind
+    - postgres:16.1-alpine
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    POSTGRES_DB: 'demo-test'
+    POSTGRES_USER: 'admin'
+    POSTGRES_PASSWORD: 'test'
+    CI_DB_HOST_PORT: 'postgres:5432'
+  script:
+    - gradle :CheckersContext:e2eTest --no-daemon
+  artifacts:
+    when: always
+    reports:
+      junit: CheckersContext/build/test-results/e2eTest/**/TEST-*.xml
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: pull
+    paths:
+      - build
+      - .gradle 
+
+checkers-trigger-gcb:
   image: google/cloud-sdk:latest
   stage: deploy
   identity: google_cloud
   script:
     - gcloud config set project $GCLOUD_PROJECT
-    - gcloud builds triggers run gameplatform-context --region europe-west1
+    - gcloud builds triggers run checkers-context --region europe-west1
   

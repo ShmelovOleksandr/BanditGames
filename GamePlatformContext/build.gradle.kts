@@ -15,14 +15,14 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-websocket") // WebSocket
     implementation("org.springframework.boot:spring-boot-starter-security") // Security
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server") // OAuth2 Resource Server
-    implementation("org.springframework.boot:spring-boot-starter-actuator") // Actuator
-    implementation("org.springframework.boot:spring-boot-starter-webflux") // Reactive Web (WebFlux)
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("com.azure.spring:spring-cloud-azure-starter-actuator")
 
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.springframework.boot:spring-boot-testcontainers") // For integration tests with Testcontainers
+    testImplementation("org.springframework.boot:spring-boot-testcontainers")
     testImplementation("org.testcontainers:rabbitmq")
     testImplementation("org.testcontainers:postgresql")
     compileOnly("org.projectlombok:lombok")
