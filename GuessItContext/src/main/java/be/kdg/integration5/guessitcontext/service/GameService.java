@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 
 public interface GameService {
     MoveResult makeMove(PlayerId playerId, Integer guess);
+    void notifyGameRegistration();
     void sendSessionInfo(SessionId sessionId);
     void notifyAllPlayersSession(Session session);
     void notifyPlayersAfterIncorrectMove(MoveResult moveResult, Session session);

@@ -26,7 +26,4 @@ public class Achievement {
     @Column(nullable = false)
     private String imageUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private List<PlayerAchievement> playerAchievements;
-
 }

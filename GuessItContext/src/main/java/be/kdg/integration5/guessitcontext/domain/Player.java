@@ -22,8 +22,4 @@ public class Player {
 
     @Column(nullable = false)
     private String username;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private List<PlayerAchievement> playerAchievements;
-
 }

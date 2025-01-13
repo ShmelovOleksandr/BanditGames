@@ -1,0 +1,30 @@
+[
+  {
+    "rule": "Game Setup",
+    "description": "Each player chooses a unique identifier (e.g., Player 1 and Player 2). The number to be guessed is chosen secretly by the game system or a non-participating third party."
+  },
+  {
+    "rule": "Objective",
+    "description": "The objective of the game is to correctly guess the secret number between 1 and 10 before the other player."
+  },
+  {
+    "rule": "Turn Order",
+    "description": "Players take turns guessing the secret number. Player 1 starts the game, followed by Player 2, and the turns alternate."
+  },
+  {
+    "rule": "Guess Validity",
+    "description": "Players must guess a number between 1 and 10 during their turn. Invalid guesses (numbers outside this range) will be skipped, and the turn will be forfeited."
+  },
+  {
+    "rule": "Hints and Feedback",
+    "description": "After each guess, the game system provides feedback indicating whether the guessed number is too low, too high, or correct."
+  },
+  {
+    "rule": "Winning the Game",
+    "description": "The player who guesses the correct number first is declared the winner."
+  },
+  {
+    "rule": "Game Duration",
+    "description": "The game continues until one player correctly guesses the number. There is no time limit unless specified beforehand."
+  }
+]

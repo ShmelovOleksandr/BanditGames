@@ -18,7 +18,4 @@ public class PlayerAchievement {
 
     @EmbeddedId
     private PlayerAchievementId playerAchievementId;
-
-    @OneToMany(mappedBy = )
-    private Player player;
 }

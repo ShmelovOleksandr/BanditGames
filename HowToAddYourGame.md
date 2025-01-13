@@ -108,7 +108,12 @@ Here is a list of all the necessary queues and exchanges that you have to connec
 If your game contains achievements, you have to create an API to retrieve the information about achievements and which players unlocked them.
 Here are the rules you must follow:
 
+General game achievements
 * API name must be: "/api/v1/achievements'
+* JSON Event schema for achievement DTO: [achievement_schema](#achievement_schema)
+
+Player unlocked achievements
+* API name must be: "/api/v1/players/{playerId}/achievements"
 * JSON Event schema for achievement DTO: [achievement_schema](#achievement_schema)
 
 

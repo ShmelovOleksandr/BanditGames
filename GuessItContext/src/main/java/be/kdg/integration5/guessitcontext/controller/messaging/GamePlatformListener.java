@@ -24,7 +24,7 @@ public class GamePlatformListener {
 
     @RabbitListener(queues = LOBBY_QUEUE, messageConverter = "#{jackson2JsonMessageConverter}")
     public void createGameFromLobby(LobbyCreatedEvent event) {
-        if (event.gameName().equals(this.gameName)) {
+        if (event.gameTitle().equals(this.gameName)) {
             logger.info("Receive lobby created event: {}", event.lobbyId());
             Session session = sessionService.createSession(event);
             sessionService.sendGameSessionStartEvent(session);
