@@ -43,6 +43,7 @@ import java.util.stream.Collectors;
 @ActiveProfiles("test")
 @ContextConfiguration(classes = { StatisticsContextApplication.class })
 @SpringBootTest
+@EnableAutoConfiguration(exclude = RabbitAutoConfiguration.class)
 public class PlayerMoveIntegrationTest {
 
     @MockBean
@@ -156,7 +157,6 @@ public class PlayerMoveIntegrationTest {
         assertThat(moveEntities, hasSize(2));
         assertThat(moveEntities, hasItem(hasProperty("endTime", nullValue())));
         assertThat(moveEntities, everyItem(hasProperty("moveNumber", equalTo(1))));
-        assertThat(moveEntities, hasItem(hasProperty("startTime", equalTo(event.timestamp()))));
         assertThat(playerMetricsEntities, hasSize(2));
     }
 

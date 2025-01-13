@@ -17,6 +17,9 @@ public class WebSocketMessageBrokerConfig implements WebSocketMessageBrokerConfi
     @Value("${server.port}")
     private int serverPort;
 
+    @Value("${game.frontendUrl}")
+    private String frontendUrl;
+
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/topic", "/queue");
@@ -27,7 +30,7 @@ public class WebSocketMessageBrokerConfig implements WebSocketMessageBrokerConfi
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         String allowedOrigin = "http://localhost:" + serverPort;
         registry.addEndpoint("ws")
-                .setAllowedOrigins("http://localhost:5174", allowedOrigin);
+                .setAllowedOrigins(frontendUrl, allowedOrigin);
     }
 }
 

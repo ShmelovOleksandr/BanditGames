@@ -52,7 +52,8 @@ public class CreateGameUseCaseE2ETest {
     private FindGamePort findGamePort;
 
     @Value("${game.name}")
-    private  String gameName;
+    private String gameName;
+
 
     @BeforeAll
     static void startRabbitMQ() {

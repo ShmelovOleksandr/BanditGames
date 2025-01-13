@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ActiveProfiles("test")
 @ContextConfiguration(classes = { GamePlatformContextApplication.class })
 @SpringBootTest
+@EnableAutoConfiguration(exclude = {RabbitAutoConfiguration.class})
 public class LobbyAdapterUnitTest {
 
     @MockBean
@@ -114,6 +115,7 @@ public class LobbyAdapterUnitTest {
         // Assert
         assertEquals(1, lobbies.size());
         assertEquals(lobbies.getFirst().getLobbyOwner().getPlayerId(), player.getPlayerId());
+        assertEquals(lobbies.getFirst().getPlayingGame().getTitle(), game.getTitle());
         assertEquals(1, lobbies.getFirst().getPlayers().size());
     }
 

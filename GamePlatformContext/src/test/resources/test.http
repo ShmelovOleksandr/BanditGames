@@ -1,0 +1,64 @@
+### Step 1: Authenticate and Get Access Token
+POST http://localhost:8180/realms/Bandit%20Games/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=platform-client&
+client_secret=VhSAZp6KUOfLGNuw98vEV8l5kMPn2wO4&
+username=sofiia&
+password=sofiia&
+grant_type=password&
+scope=openid
+
+> {%
+    const accessToken = response.body.access_token;
+    client.global.set("access_token", accessToken);
+    console.log("Access Token:", accessToken);
+%}
+
+###
+
+### Step 2: Send Friend Request
+POST http://localhost:8041/api/v1/friends/send?senderId=f7c56b6e-d7dc-4bde-bdf9-e9b0ecec8bf5&receiverId=3d8a9e74-8534-43af-99a0-d60593acb4a6
+Authorization: Bearer {{access_token}}
+
+> {%
+    console.log("Friend Request Sent Response:", response.body);
+%}
+
+###
+
+### Step 3: Verify Pending Requests for Receiver
+GET http://localhost:8041/api/v1/friends/pending?playerId=3d8a9e74-8534-43af-99a0-d60593acb4a6
+Authorization: Bearer {{access_token}}
+
+> {%
+    console.log("Pending Requests for Receiver:", response.body);
+%}
+
+### Step 2: Accept Friend Request
+POST http://localhost:8041/api/v1/friends/respond?requestId=7a1579a5-74ba-4e16-96b2-133e3fdff3d6&accepted=true
+Authorization: Bearer {{access_token}}
+
+> {%
+    console.log("Friend Request Response:", response.body);
+%}
+
+###
+
+### Step 3: Verify Friend List for Sender
+GET http://localhost:8041/api/v1/players/f7c56b6e-d7dc-4bde-bdf9-e9b0ecec8bf5/friends
+Authorization: Bearer {{access_token}}
+
+> {%
+    console.log("Sender's Friend List:", response.body);
+%}
+
+###
+
+### Step 4: Verify Friend List for Receiver
+GET http://localhost:8041/api/v1/friends?playerId=<receiverId>
+Authorization: Bearer {{access_token}}
+
+> {%
+    console.log("Receiver's Friend List:", response.body);
+%}

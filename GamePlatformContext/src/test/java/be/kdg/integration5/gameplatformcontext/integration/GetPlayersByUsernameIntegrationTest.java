@@ -35,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = { GamePlatformContextApplication.class })
 @SpringBootTest
 @AutoConfigureMockMvc
+@EnableAutoConfiguration(exclude = {RabbitAutoConfiguration.class})
 public class GetPlayersByUsernameIntegrationTest extends KeycloakTestContainers{
 
     @MockBean

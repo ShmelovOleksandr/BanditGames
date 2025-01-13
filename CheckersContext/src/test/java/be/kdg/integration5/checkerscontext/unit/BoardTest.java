@@ -107,6 +107,33 @@ public class BoardTest {
     }
 
     @Test
+    void shouldReturnAttackMovesForKingPieceWhenEnemyPieceIsAdjacent() {
+        Piece king = new Piece(new PiecePosition(3, 4), Piece.PieceColor.WHITE, player1);
+        king.upgrade();
+        board.addPiece(king);
+        board.addPiece(new Piece(new PiecePosition(4, 5), Piece.PieceColor.BLACK, player2));
+
+        List<Move> possibleMoves = board.getPossibleMoves(king);
+        assertEquals(4, possibleMoves.size());
+        assertTrue(possibleMoves.contains(new Move(new PiecePosition(3, 4), new PiecePosition(5, 6), Move.MoveType.ATTACK)));
+    }
+
+    @Test
+    void shouldReturnMultiStepAttackMovesWithIntermediatePositionsForKingPiece() {
+        Piece king = new Piece(new PiecePosition(2, 3), Piece.PieceColor.WHITE, player1);
+        king.upgrade();
+        board.addPiece(king);
+        board.addPiece(new Piece(new PiecePosition(3, 4), Piece.PieceColor.BLACK, player2));
+        board.addPiece(new Piece(new PiecePosition(5, 6), Piece.PieceColor.BLACK, player2));
+
+        List<Move> possibleMoves = board.getPossibleMoves(king);
+        assertEquals(3, possibleMoves.size());
+        Move expectedMove = new Move(new PiecePosition(2, 3), new PiecePosition(6, 7), Move.MoveType.ATTACK);
+        expectedMove.addIntermediateAttackPosition(new PiecePosition(4, 5));
+        assertTrue(possibleMoves.contains(expectedMove));
+    }
+
+    @Test
     void shouldAllowKingToMoveInAllDirections() {
         Piece king = new Piece(new PiecePosition(3, 4), Piece.PieceColor.WHITE, player1);
         king.setKing(true);

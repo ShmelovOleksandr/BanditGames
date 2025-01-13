@@ -33,11 +33,11 @@ public class PredictionWebAdapter implements FetchPredictionPort {
     @Override
     public Map<Player, Predictions> fetchPredictions(List<Player> players) {
         PredictionsRequest predictionsRequest = predictionsWebConverter.toRequest(players);
-
+        String apiUrl = String.format("%s/predict", predictionsUrl);
         PredictionsResponse response = null;
         try {
             response =  webClient.post()
-                    .uri(predictionsUrl)
+                    .uri(apiUrl)
                     .bodyValue(predictionsRequest)
                     .retrieve()
                     .bodyToMono(PredictionsResponse.class)

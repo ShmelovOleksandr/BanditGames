@@ -10,7 +10,9 @@ public record GameGetDto(
         String title,
         String description,
         Double priceAmount,
-        String currencyCode
+        String currencyCode,
+        String backendUrl,
+        String gameImageUrl
 ) {
 
     public GameGetDto {
@@ -27,7 +29,9 @@ public record GameGetDto(
                 game.getTitle(),
                 game.getDescription(),
                 game.getPrice().amount(),
-                game.getPrice().currency().getCurrencyCode()
+                game.getPrice().currency().getCurrencyCode(),
+                game.getBackendUrl(),
+                game.getGameImageUrl()
         );
     }
 }

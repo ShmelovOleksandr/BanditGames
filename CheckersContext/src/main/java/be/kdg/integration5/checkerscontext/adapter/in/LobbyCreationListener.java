@@ -16,11 +16,11 @@ public class LobbyCreationListener {
 
     private static final String LOBBY_QUEUE = "lobby_queue";
 
+    @Value("${game.name}")
+    private String gameName;
+
     private final CreateGameUseCase createGameUseCase;
     private final Logger logger = LoggerFactory.getLogger(LobbyCreationListener.class);
-
-    @Value("${game.name}")
-    private  String gameName;
 
     public LobbyCreationListener(CreateGameUseCase createGameUseCase) {
         this.createGameUseCase = createGameUseCase;
@@ -28,7 +28,7 @@ public class LobbyCreationListener {
 
     @RabbitListener(queues = LOBBY_QUEUE, messageConverter = "#{jackson2JsonMessageConverter}")
     public void createGameFromLobby(LobbyCreatedEvent event) {
-        if (event.gameName().equals(this.gameName)) {
+        if (event.gameTitle().equals(gameName)) {
             CreateGameCommand command = new CreateGameCommand(
                     event.lobbyId(),
                     event.players().stream()

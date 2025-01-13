@@ -1,5 +1,6 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
+    id: 'pull-docker-cache'
     entrypoint: 'bash'
     args: [
       '-c',
@@ -7,6 +8,7 @@ steps:
     ]
 
   - name: 'gcr.io/cloud-builders/docker'
+    id: 'build'
     args: [
       'build',
       '-t', '$_DOCKER_IMAGE_PATH',
@@ -16,12 +18,14 @@ steps:
     ]
 
   - name: 'gcr.io/cloud-builders/docker'
+    id: 'upload'
     args: [
       'push',
       '$_DOCKER_IMAGE_PATH'
     ]
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'deploy'
     entrypoint: gcloud
     args: [
       'run',
@@ -32,9 +36,13 @@ steps:
       '--region',
       '$_LOCATION',
       '--port',
-      '3000',
-      '--vpc-connector',
-      'my-vpc-connector',
+      '8080',
+      '--network',
+      'projects/shared-vpc-host-447502/global/networks/my-shared-vpc',
+      '--subnet',
+      'projects/shared-vpc-host-447502/regions/europe-west1/subnetworks/subnet-services-back',
+      '--vpc-egress',
+      'all-traffic',
       '--ingress',
       'internal',
       '--allow-unauthenticated'
@@ -42,8 +50,8 @@ steps:
 
 substitutions:
   _LOCATION: 'europe-west1'
-  _SERVICE_NAME: 'gameplatform-service'
-  _DOCKER_IMAGE_PATH: 'europe-west1-docker.pkg.dev/checkers-integration5/checkers-repo/statistics-service:latest'
+  _SERVICE_NAME: 'statistics-service'
+  _DOCKER_IMAGE_PATH: 'europe-west1-docker.pkg.dev/banditgames-back/banditgames-repo/statistics-service:latest'
 
 options:
   automapSubstitutions: true

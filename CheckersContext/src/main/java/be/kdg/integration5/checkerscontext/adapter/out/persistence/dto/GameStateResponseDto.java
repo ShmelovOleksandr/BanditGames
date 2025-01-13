@@ -6,7 +6,7 @@ import be.kdg.integration5.checkerscontext.domain.Game;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public record GameStateResponseDto(Boolean isFinished, UUID currentPlayer, List<PlayerResponseDto> players, List<PieceGetDto> pieces) {
+public record GameStateResponseDto(Boolean isFinished, UUID winnerId, boolean isDraw, UUID currentPlayer, List<PlayerResponseDto> players, List<PieceGetDto> pieces) {
     public GameStateResponseDto {
         Objects.requireNonNull(isFinished);
         Objects.requireNonNull(currentPlayer);
@@ -36,6 +36,8 @@ public record GameStateResponseDto(Boolean isFinished, UUID currentPlayer, List<
 
         return new GameStateResponseDto(
                 game.isFinished(),
+                game.getWinner() == null ? null : game.getWinner().getPlayerId().uuid(),
+                game.isDraw(),
                 game.getBoard().getCurrentPlayer().getPlayerId().uuid(),
                 players,
                 pieces

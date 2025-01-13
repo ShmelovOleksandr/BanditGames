@@ -12,54 +12,58 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MQTopology {
-    private static final String GAME_EVENTS_EXCHANGE = "game_events";
-    private static final String GAME_START_QUEUE = "game_start_queue";
-    private static final String GAME_END_QUEUE = "game_end_queue";
-    private static final String PLAYER_MOVE_QUEUE = "player_move_queue";
+
+
+    private static final String CHECKERS_EVENTS_EXCHANGE = "checkers_events";
+    private static final String CHECKERS_MOVE_MADE_QUEUE = "checkers_move_made_queue";
+    private static final String CHECKERS_GAME_STARTED_QUEUE = "checkers_game_started_queue";
+    private static final String CHECKERS_GAME_FINISHED_QUEUE = "checkers_game_finished_queue";
 
     @Bean
-    TopicExchange gameEventsExchange() {
-        return new TopicExchange(GAME_EVENTS_EXCHANGE);
+    TopicExchange checkersEventsExchange() {
+        return new TopicExchange(CHECKERS_EVENTS_EXCHANGE);
     }
 
     @Bean
-    Queue gameStartQueue() {
-        return new Queue(GAME_START_QUEUE, true);
+    Queue checkersMovesQueue() {
+        return new Queue(CHECKERS_MOVE_MADE_QUEUE, true);
     }
 
     @Bean
-    Queue gameEndQueue() {
-        return new Queue(GAME_END_QUEUE, true);
-    }
-
-    @Bean
-    Queue playerMoveQueue() {
-        return new Queue(PLAYER_MOVE_QUEUE, true);
-    }
-
-    @Bean
-    Binding gameStartBinding(TopicExchange gameEventsExchange, Queue gameStartQueue) {
+    Binding checkersMoveMadeBinding(TopicExchange checkersEventsExchange, Queue checkersMovesQueue) {
         return BindingBuilder
-                .bind(gameStartQueue)
-                .to(gameEventsExchange)
-                .with("game.#.started");
+                .bind(checkersMovesQueue)
+                .to(checkersEventsExchange)
+                .with("checkers.#.move.made");
     }
 
     @Bean
-    Binding playerMoveBinding(TopicExchange gameEventsExchange, Queue playerMoveQueue) {
-        return BindingBuilder
-                .bind(playerMoveQueue)
-                .to(gameEventsExchange)
-                .with("player.#.moved");
+    Queue checkersGameStartedQueue() {
+        return new Queue(CHECKERS_GAME_STARTED_QUEUE, true);
     }
 
     @Bean
-    Binding gameFinishBinding(TopicExchange gameEventsExchange, Queue gameEndQueue) {
+    Binding checkersGameStartedBinding(TopicExchange checkersEventsExchange, Queue checkersGameStartedQueue) {
         return BindingBuilder
-                .bind(gameEndQueue)
-                .to(gameEventsExchange)
-                .with("game.#.finished");
+                .bind(checkersGameStartedQueue)
+                .to(checkersEventsExchange)
+                .with("checkers.game.#.started");
     }
+
+    @Bean
+    Queue checkersGameFinishedQueue() {
+        return new Queue(CHECKERS_GAME_FINISHED_QUEUE, true);
+    }
+
+    @Bean
+    Binding checkersGameFinishedBinding(TopicExchange checkersEventsExchange, Queue checkersGameFinishedQueue) {
+        return BindingBuilder
+                .bind(checkersGameFinishedQueue)
+                .to(checkersEventsExchange)
+                .with("checkers.game.#.finished");
+    }
+
+
 
     @Bean
     RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {

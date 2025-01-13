@@ -35,6 +35,7 @@ import static org.mockito.Mockito.*;
 @ActiveProfiles("test")
 @ContextConfiguration(classes = { StatisticsContextApplication.class })
 @SpringBootTest
+@EnableAutoConfiguration(exclude = RabbitAutoConfiguration.class)
 public class SessionCsvExporterUnitTest {
 
     @MockBean

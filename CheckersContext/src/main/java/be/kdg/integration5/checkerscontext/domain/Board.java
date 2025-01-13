@@ -166,11 +166,13 @@ public class Board {
     }
 
     private List<Move> getAttackMovesFromSquare(Piece piece) {
-        return getAttackMovesFromSquare(piece, new ArrayList<>());
+        return getAttackMovesFromSquare(piece, new HashSet<>());
     }
 
-    private List<Move> getAttackMovesFromSquare(Piece piece, List<PiecePosition> markedForRemovalPositions) {
+    private List<Move> getAttackMovesFromSquare(Piece piece, Set<PiecePosition> markedForRemovalPositions) {
         PiecePosition piecePosition = piece.getPiecePosition();
+        markedForRemovalPositions.add(piecePosition);
+
         Piece.PieceColor pieceColor = piece.getColor();
         boolean isKing = piece.isKing();
 
@@ -210,7 +212,7 @@ public class Board {
         return allAttackMoves.stream().filter(move -> move.getMoveLength() == longestMoveLength).toList();
     }
 
-    private List<PiecePosition> getPossibleLandingPositions(PiecePosition piecePosition, MoveDirection direction, Piece.PieceColor pieceColor, boolean isKing, List<PiecePosition> markedForRemovalPositions) {
+    private List<PiecePosition> getPossibleLandingPositions(PiecePosition piecePosition, MoveDirection direction, Piece.PieceColor pieceColor, boolean isKing, Set<PiecePosition> markedForRemovalPositions) {
         List<PiecePosition> possibleLandingSquares = new ArrayList<>();
         int enemyX, enemyY, landingX, landingY;
         if (!isKing) {
@@ -237,12 +239,11 @@ public class Board {
                     enemyPiece.getColor() != pieceColor &&
                     landingSquare.isEmpty() &&
                     !markedForRemovalPositions.contains(enemyPiecePosition)) {
-//                markedForRemovalPositions.add(new PiecePosition(enemyX, enemyY));
                 possibleLandingSquares.add(new PiecePosition(landingX, landingY));
             }
         } else {
             boolean enemyFound = false;
-            for (int x = piecePosition.x(), y = piecePosition.x(); !isOutOfBounds(x, y); x += direction.xShift, y += direction.yShift) {
+            for (int x = piecePosition.x() + direction.xShift, y = piecePosition.y() + direction.yShift; !isOutOfBounds(x, y); x += direction.xShift, y += direction.yShift) {
                 Square enemySquare = squares[y][x];
                 if (!enemyFound) {
                     if (!enemySquare.isEmpty() && !markedForRemovalPositions.contains(new PiecePosition(x, y))) {
@@ -255,6 +256,8 @@ public class Board {
                             }
                         }
                     }
+                } else if (!enemySquare.isEmpty()) {
+                    break;
                 } else {
                     possibleLandingSquares.add(new PiecePosition(x, y));
                 }

@@ -24,6 +24,7 @@ public abstract class KeycloakTestContainers {
     static {
         keycloak = new KeycloakContainer().withRealmImportFile("realm-export.json");
         keycloak.start();
+        System.out.println("Keycloak started at: " + keycloak.getAuthServerUrl());
     }
 
     @DynamicPropertySource

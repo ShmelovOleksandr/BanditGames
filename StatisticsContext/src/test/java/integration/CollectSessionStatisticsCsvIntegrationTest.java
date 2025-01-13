@@ -24,6 +24,7 @@ import static org.hamcrest.Matchers.containsString;
 @ContextConfiguration(classes = { StatisticsContextApplication.class })
 @SpringBootTest
 @AutoConfigureMockMvc
+@EnableAutoConfiguration(exclude = RabbitAutoConfiguration.class)
 public class CollectSessionStatisticsCsvIntegrationTest extends KeycloakTestContainers {
 
     @Autowired

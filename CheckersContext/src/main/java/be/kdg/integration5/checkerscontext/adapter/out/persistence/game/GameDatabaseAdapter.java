@@ -4,6 +4,7 @@ import be.kdg.integration5.checkerscontext.adapter.out.persistence.exception.Gam
 import be.kdg.integration5.checkerscontext.adapter.out.persistence.piece.PieceJpaEntity;
 import be.kdg.integration5.checkerscontext.adapter.out.persistence.piece.PieceJpaEntityId;
 import be.kdg.integration5.checkerscontext.adapter.out.persistence.piece.PieceJpaRepository;
+import be.kdg.integration5.checkerscontext.adapter.out.persistence.player.PlayerJpaEntity;
 import be.kdg.integration5.checkerscontext.adapter.out.persistence.player.PlayerJpaRepository;
 import be.kdg.integration5.checkerscontext.domain.*;
 import be.kdg.integration5.checkerscontext.port.out.DeleteGamePort;
@@ -18,8 +19,7 @@ import java.util.stream.Collectors;
 
 
 @Component
-public class GameDatabaseAdapter implements PersistGamePort, DeleteGamePort, FindGamePort {
-    private final Logger logger = LoggerFactory.getLogger(GameDatabaseAdapter.class);
+public class GameDatabaseAdapter implements PersistGamePort, FindGamePort {
     private final GameJpaRepository gameJpaRepository;
     private final PieceJpaRepository pieceJpaRepository;
     private final PlayerJpaRepository playerJparepository;
@@ -53,10 +53,16 @@ public class GameDatabaseAdapter implements PersistGamePort, DeleteGamePort, Fin
         UUID currentPlayerId = game.getBoard().getCurrentPlayer().getPlayerId().uuid();
         gameJpaEntity.setCurrentPlayer(playerJparepository.getReferenceById(currentPlayerId));
         gameJpaEntity.setFinished(game.isFinished());
+
+        if (game.getWinner() != null) {
+            PlayerJpaEntity winnerJpaEntity = playerJparepository.getReferenceById(game.getWinner().getPlayerId().uuid());
+            gameJpaEntity.setWinner(winnerJpaEntity);
+        }
+
         gameJpaRepository.save(gameJpaEntity);
 
         // Update pieces
-        Set<PieceJpaEntity> existingPieces =  gameJpaEntity.getPieces();
+        Set<PieceJpaEntity> existingPieces = gameJpaEntity.getPieces();
         Map<PieceJpaEntityId, PieceJpaEntity> existingPieceMap = existingPieces.stream()
                 .collect(Collectors.toMap(PieceJpaEntity::getPieceId, piece -> piece));
 
@@ -92,11 +98,6 @@ public class GameDatabaseAdapter implements PersistGamePort, DeleteGamePort, Fin
     }
 
     @Override
-    public void deleteById(GameId gameId) {
-        //TODO Implement
-    }
-
-    @Override
     public Game findById(GameId gameId) {
         GameJpaEntity gameJpaEntity = gameJpaRepository.findByIdFetched(gameId.uuid()).orElseThrow(
                 () -> new GameNotFoundException("Game with given id [%s] is not found".formatted(gameId.uuid()))
@@ -106,9 +107,9 @@ public class GameDatabaseAdapter implements PersistGamePort, DeleteGamePort, Fin
 
     @Override
     public Game findGameByPlayerAndGameEndNull(PlayerId playerId) {
-        GameJpaEntity gameJpaEntity = gameJpaRepository.findByPlayerIdAndEndDateNullFetched(playerId.uuid())
-                .orElseThrow(() -> new GameNotFoundException("Game for player [%s] not found.]".formatted(playerId.uuid())));
-
+        GameJpaEntity gameJpaEntity = gameJpaRepository.findByPlayerIdAndEndDateNullFetched(playerId.uuid()).orElseThrow(
+                () -> new GameNotFoundException("Game for player [%s] not found.]".formatted(playerId.uuid()))
+        );
         return gameJpaConverter.toDomain(gameJpaEntity);
     }
 

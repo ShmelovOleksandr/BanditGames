@@ -14,4 +14,4 @@ COPY --from=builder /app/dependencies/ ./
 COPY --from=builder /app/spring-boot-loader/ ./
 COPY --from=builder /app/snapshot-dependencies/ ./
 COPY --from=builder /app/application/ ./
-ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"] 
+ENTRYPOINT ["java", "-Dspring.profiles.active=gcloud", "org.springframework.boot.loader.launch.JarLauncher"] 

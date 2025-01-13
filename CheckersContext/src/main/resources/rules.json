@@ -1,0 +1,38 @@
+[
+  {
+    "rule": "Board Setup",
+    "description": "The game is played on a 10x10 board with 50 dark squares. Each player starts with 20 pieces placed on the first four rows of dark squares closest to them."
+  },
+  {
+    "rule": "Objective",
+    "description": "The goal is to capture all the opponent's pieces or block them so they cannot make a move."
+  },
+  {
+    "rule": "Piece Movement",
+    "description": "Pieces move diagonally forward one square to an unoccupied dark square."
+  },
+  {
+    "rule": "Capturing",
+    "description": "A piece can capture an opponent's piece by jumping over it diagonally to an empty square immediately beyond. Multiple jumps are allowed in one turn."
+  },
+  {
+    "rule": "Mandatory Capture",
+    "description": "If a player has the opportunity to capture, they must do so. If multiple captures are available, the player must make the sequence that captures the most pieces."
+  },
+  {
+    "rule": "Promotion to King",
+    "description": "A piece reaching the opponent's back row is promoted to a king. Kings are marked by stacking another piece on top or turning the piece over."
+  },
+  {
+    "rule": "King Movement",
+    "description": "Kings can move diagonally any number of squares in a straight line and capture in the same manner."
+  },
+  {
+    "rule": "Winning the Game",
+    "description": "A player wins by capturing all the opponent's pieces or blocking them so they cannot make a move."
+  },
+  {
+    "rule": "Draw",
+    "description": "The game ends in a draw if neither player can force a win, or if the same position is repeated three times with the same player to move."
+  }
+]

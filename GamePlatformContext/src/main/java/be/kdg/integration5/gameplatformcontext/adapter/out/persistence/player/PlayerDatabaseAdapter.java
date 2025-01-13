@@ -22,10 +22,11 @@ public class PlayerDatabaseAdapter implements FindPlayerPort, PersistPlayerPort 
 
     @Override
     public Player findPlayerById(PlayerId playerId) {
-        return playerJpaRepository.findById(playerId.uuid()).orElseThrow(
-                () -> new PlayerNotFoundException("Player with the given Id[%s] was not found.".formatted(playerId.uuid()))
-        ).toDomain();
+        PlayerJpaEntity entity = playerJpaRepository.findByPlayerIdFetchedFriends(playerId.uuid())
+                .orElseThrow(() -> new PlayerNotFoundException("Player with the given Id[%s] was not found.".formatted(playerId.uuid())));
+        return entity.toDomain();
     }
+
 
     @Override
     public boolean playerExists(PlayerId playerId) {
@@ -43,6 +44,16 @@ public class PlayerDatabaseAdapter implements FindPlayerPort, PersistPlayerPort 
 
     @Override
     public Player save(Player player) {
+        if (player.getFriends() != null)
+            playerJpaRepository.saveAll(player.getFriends()
+                    .stream().map(PlayerJpaEntity::of).toList());
         return playerJpaRepository.save(PlayerJpaEntity.of(player)).toDomain();
     }
+
+    @Override
+    public List<Player> findFriends(PlayerId playerId) {
+        List<PlayerJpaEntity> friends = playerJpaRepository.findPlayersFriendsFetched(playerId.uuid());
+        return friends.stream().map(PlayerJpaEntity::toDomain).toList();
+    }
+
 }

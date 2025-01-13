@@ -9,6 +9,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.retry.policy.SimpleRetryPolicy;
 
 @Configuration
 public class MQTopology {
@@ -17,12 +18,22 @@ public class MQTopology {
     private static final String NEW_PLAYER_QUEUE = "new_player_queue";
     private static final String NEW_GAME_QUEUE = "new_game_queue";
 
+    private static final String PLATFORM_GAME_EXCHANGE = "platform_game_exchange";
+    private static final String NEW_REGISTERED_GAME_QUEUE = "new_registered_game_queue";
+    private static final String NEW_RULES_QUEUE = "new_rules_queue";
+
+
     private static final String LOBBY_EVENTS_EXCHANGE = "lobby_events";
     private static final String LOBBY_QUEUE = "lobby_queue";
 
     @Bean
     TopicExchange statisticsEventsExchange() {
         return new TopicExchange(STATISTICS_EXCHANGE);
+    }
+
+    @Bean
+    TopicExchange platformGameExchange() {
+        return new TopicExchange(PLATFORM_GAME_EXCHANGE);
     }
 
     @Bean
@@ -36,12 +47,34 @@ public class MQTopology {
     }
 
     @Bean
-    Binding newGameBinding(TopicExchange statisticsEventsExchange, Queue newGameQueue) {
-        return BindingBuilder
-                .bind(newGameQueue)
-                .to(statisticsEventsExchange)
-                .with("game.#.registered");
+    Queue newRegisteredGameQueue() {
+        return new Queue(NEW_REGISTERED_GAME_QUEUE, true);
     }
+
+    @Bean
+    Queue newRulesQueue() {
+        return new Queue(NEW_RULES_QUEUE, true);
+    }
+
+    @Bean
+    Binding newRegistereGamedBinding(TopicExchange platformGameExchange, Queue newRegisteredGameQueue) {
+        return BindingBuilder
+                .bind(newRegisteredGameQueue)
+                .to(platformGameExchange)
+                .with("newgame.#.registered");
+    }
+
+    @Bean
+    Binding newRulesBinding(TopicExchange platformGameExchange, Queue newRulesQueue) {
+        return BindingBuilder
+                .bind(newRulesQueue)
+                .to(platformGameExchange)
+                .with("rules.#.registered");
+    }
+
+
+
+
 
     @Bean
     Binding newPlayerBinding(TopicExchange statisticsEventsExchange, Queue newPlayerQueue) {
@@ -49,6 +82,14 @@ public class MQTopology {
                 .bind(newPlayerQueue)
                 .to(statisticsEventsExchange)
                 .with("player.#.registered");
+    }
+
+    @Bean
+    Binding newGameBinding(TopicExchange statisticsEventsExchange, Queue newGameQueue) {
+        return BindingBuilder
+                .bind(newGameQueue)
+                .to(statisticsEventsExchange)
+                .with("game.#.registered");
     }
 
     @Bean

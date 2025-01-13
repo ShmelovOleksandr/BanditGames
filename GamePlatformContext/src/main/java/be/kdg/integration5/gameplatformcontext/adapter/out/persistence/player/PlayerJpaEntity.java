@@ -12,7 +12,9 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "players")
@@ -22,7 +24,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class PlayerJpaEntity {
     @Id
-    @Column(nullable = false, unique = true, updatable = false)
+    @Column(nullable = false, unique = true, updatable = false, name = "player_id")
     private UUID playerId;
 
     @Column(nullable = false)
@@ -42,13 +44,33 @@ public class PlayerJpaEntity {
     private List<LobbyPlayerJpaEntity> lobbyPlayers;
 
     @ManyToMany
-    private List<PlayerJpaEntity> friends;
+    @JoinTable(
+            name = "players_friends",
+            joinColumns = @JoinColumn(name = "player_id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id")
+    )
+    private Set<PlayerJpaEntity> friends;
 
     public PlayerJpaEntity(UUID playerId, int age, Player.Gender gender, String username) {
         this.playerId = playerId;
         this.age = age;
         this.gender = gender;
         this.username = username;
+    }
+
+    public PlayerJpaEntity(UUID playerId, String username, int age, Player.Gender gender) {
+        this.playerId = playerId;
+        this.username = username;
+        this.age = age;
+        this.gender = gender;
+    }
+
+    public PlayerJpaEntity(UUID playerId, int age, Player.Gender gender, String username, Set<PlayerJpaEntity> friends) {
+        this.playerId = playerId;
+        this.age = age;
+        this.gender = gender;
+        this.username = username;
+        this.friends = friends;
     }
 
     private Player toSimpleDomain() {
@@ -76,7 +98,15 @@ public class PlayerJpaEntity {
                 player.getPlayerId().uuid(),
                 player.getAge(),
                 player.getGender(),
-                player.getUsername()
+                player.getUsername(),
+                player.getFriends() == null ? null : player.getFriends().stream().map(
+                        friend -> new PlayerJpaEntity(
+                                friend.getPlayerId().uuid(),
+                                friend.getUsername(),
+                                friend.getAge(),
+                                friend.getGender()
+                        )
+                ).collect(Collectors.toSet())
         );
     }
 }

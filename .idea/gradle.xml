@@ -19,6 +19,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/CheckersAchievementContext" />
             <option value="$PROJECT_DIR$/CheckersContext" />
             <option value="$PROJECT_DIR$/GamePlatformContext" />
             <option value="$PROJECT_DIR$/GuessItContext" />
@@ -28,6 +29,9 @@
             <option value="$PROJECT_DIR$/common" />
           </set>
         </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/CheckersAchievementContext" />
       </GradleProjectSettings>
     </option>
   </component>

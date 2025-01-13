@@ -31,6 +31,7 @@ public class GameStartPublisher implements NotifyGameStartPort {
                 LOBBY_EVENTS_EXCHANGE,
                 routingKey,
                 new LobbyCreatedEvent(
+                        lobby.getPlayingGame().getTitle(),
                         lobbyId,
                         lobby.getLobbyOwner().getPlayerId().uuid(),
                         lobby.getPlayers()

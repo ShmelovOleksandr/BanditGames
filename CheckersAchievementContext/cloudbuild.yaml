@@ -1,0 +1,61 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'pull-docker-cache'
+    entrypoint: 'bash'
+    args: [
+      '-c',
+      'docker pull $_DOCKER_IMAGE_PATH || exit 0'
+    ]
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'build'
+    args: [
+      'build',
+      '-t', '$_DOCKER_IMAGE_PATH',
+      '--cache-from', '$_DOCKER_IMAGE_PATH',
+      '-f', 'CheckersAchievementContext/Dockerfile',
+      '.'
+    ]
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'upload'
+    args: [
+      'push',
+      '$_DOCKER_IMAGE_PATH'
+    ]
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'deploy'
+    entrypoint: gcloud
+    args: [
+      'run',
+      'deploy',
+      '$_SERVICE_NAME',
+      '--image',
+      '$_DOCKER_IMAGE_PATH',
+      '--region',
+      '$_LOCATION',
+      '--port',
+      '8080',
+      '--network',
+      'projects/shared-vpc-host-447502/global/networks/my-shared-vpc',
+      '--subnet',
+      'projects/shared-vpc-host-447502/regions/europe-west1/subnetworks/subnet-services-back',
+      '--vpc-egress',
+      'all-traffic',
+      '--ingress',
+      'internal',
+      '--allow-unauthenticated'
+    ]
+
+substitutions:
+  _LOCATION: 'europe-west1'
+  _SERVICE_NAME: 'achievement-service'
+  _DOCKER_IMAGE_PATH: 'europe-west1-docker.pkg.dev/banditgames-back/banditgames-repo/achievement-service:latest'
+
+options:
+  automapSubstitutions: true
+  logging: CLOUD_LOGGING_ONLY
+
+images:
+  - '$_DOCKER_IMAGE_PATH'

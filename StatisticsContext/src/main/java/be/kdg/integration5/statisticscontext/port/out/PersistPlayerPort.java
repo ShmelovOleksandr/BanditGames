@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface PersistPlayerPort {
     Player save(Player player);
+    List<Player> saveAll(List<Player> players);
     void updateAll(List<Player> players);
 }

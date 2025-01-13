@@ -24,7 +24,7 @@ public class PlayerDatabaseAdapter implements PersistPlayerPort {
 
     @Override
     public List<Player> saveAll(List<Player> players) {
-        List<PlayerJpaEntity> playerJpaEntities = playerJpaRepository.saveAll(players.stream().map(PlayerJpaEntity::of).collect(Collectors.toList()));
-        return playerJpaEntities.stream().map(PlayerJpaEntity::toDomain).collect(Collectors.toList());
+        List<PlayerJpaEntity> savedPlayerJpaEntities = playerJpaRepository.saveAll(players.stream().map(PlayerJpaEntity::of).toList());
+        return savedPlayerJpaEntities.stream().map(PlayerJpaEntity::toDomain).toList();
     }
 }

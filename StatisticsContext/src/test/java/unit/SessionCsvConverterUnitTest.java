@@ -24,6 +24,7 @@ import static org.hamcrest.Matchers.*;
 @ActiveProfiles("test")
 @ContextConfiguration(classes = { StatisticsContextApplication.class })
 @SpringBootTest
+@EnableAutoConfiguration(exclude = RabbitAutoConfiguration.class)
 public class SessionCsvConverterUnitTest {
 
     @MockBean

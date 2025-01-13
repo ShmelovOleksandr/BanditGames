@@ -22,6 +22,9 @@ public class SessionCsvConverter {
             for (PlayerActivity activity: session.getActivities()) {
                 Player player = activity.getPlayer();
 
+                if (player.getMetrics() == null) continue;
+                if (player.getPredictions() == null) continue;
+
                 double avgMoveDurationSeconds = activity.getMoves()
                         .stream()
                         .mapToDouble(move -> Duration.between(move.getStartTime(), move.getEndTime()).toSeconds())

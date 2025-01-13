@@ -58,7 +58,7 @@ public class LobbyDatabaseAdapter implements FindLobbyPort, PersistLobbyPort, De
     public Lobby save(Lobby lobby) {
         LobbyJpaEntity lobbyJpaEntity = LobbyJpaEntity.of(lobby);
         PlayerJpaEntity ownerJpaEntity = playerJpaRepository.getReferenceById(lobby.getLobbyOwner().getPlayerId().uuid());
-        GameJpaEntity gameJpaEntity = gameJpaRepository.getReferenceById(lobby.getPlayingGame().getGameId().uuid());
+        GameJpaEntity gameJpaEntity = gameJpaRepository.getReferenceById(   lobby.getPlayingGame().getGameId().uuid());
 
         lobbyJpaEntity.setLobbyOwner(ownerJpaEntity);
         lobbyJpaEntity.setGame(gameJpaEntity);
