@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="GuessItApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="GamePlatform.GuessItContext.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="be.kdg.integration5.guessitcontext.Main" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
